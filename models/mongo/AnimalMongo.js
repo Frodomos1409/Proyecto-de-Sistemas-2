@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const AnimalSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
     especie: { type: String },

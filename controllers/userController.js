@@ -3,13 +3,26 @@ const UserMongo = require('../models/mongo/UserMongo');
 
 exports.create = async (req, res) => {
     try {
+        // Crear en PostgreSQL
         const sql = await UserSQL.create(req.body);
-        const mongo = await new UserMongo(req.body).save();
+
+        // Adaptar datos para Mongo
+        const userForMongo = {
+            firstName: req.body.name,
+            lastName: req.body.lastName,
+            username: req.body.username,
+            email: req.body.email,
+            password: req.body.password
+        };
+
+        const mongo = await new UserMongo(userForMongo).save();
+
         res.status(201).json({ sql, mongo });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 };
+
 
 exports.getAll = async (req, res) => {
     try {

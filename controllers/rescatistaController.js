@@ -1,5 +1,5 @@
-const RescatistaMongo = require('../models/mongo/Rescatista');
-const RescatistaSQL = require('../models/postgres/Rescatista');
+const RescatistaSQL = require('../models/postgres/Rescatista.pg');
+const RescatistaMongo = require('../models/mongo/RescatistaMongo');
 
 exports.create = async (req, res) => {
   try {

@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const AdoptionSchema = new mongoose.Schema({
     animalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal', required: true },
     estado: { type: String },

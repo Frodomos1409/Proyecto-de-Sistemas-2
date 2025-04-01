@@ -1,15 +1,40 @@
+const AnimalMongo = require('../models/mongo/AnimalMongo');
+const AnimalSQL = require('../models/postgres/Animal.pg');
 const TransferSQL = require('../models/postgres/Transfer.pg');
 const TransferMongo = require('../models/mongo/TransferMongo');
 
+
 exports.create = async (req, res) => {
-    try {
-        const sql = await TransferSQL.create(req.body);
-        const mongo = await new TransferMongo(req.body).save();
-        res.status(201).json({ sql, mongo });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
+  try {
+    const { nombreAnimal, ...datos } = req.body;
+
+    if (!nombreAnimal) {
+      return res.status(400).json({ error: 'Debe incluir el campo "nombreAnimal"' });
     }
+
+    const animalSQL = await AnimalSQL.findOne({ where: { nombre: nombreAnimal } });
+    const animalMongo = await AnimalMongo.findOne({ nombre: nombreAnimal });
+
+    if (!animalSQL || !animalMongo) {
+      return res.status(404).json({ error: 'Animal no encontrado en una o ambas BD' });
+    }
+
+    const transferSQL = await TransferSQL.create({
+      ...datos,
+      animalId: animalSQL.id
+    });
+
+    const transferMongo = await new TransferMongo({
+      ...datos,
+      animalId: animalMongo._id
+    }).save();
+
+    res.status(201).json({ transferSQL, transferMongo });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
+
 
 exports.getAll = async (req, res) => {
     try {

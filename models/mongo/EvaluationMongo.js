@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const EvaluationSchema = new mongoose.Schema({
     animalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal', required: true },
     diagnostico: { type: String, required: true },

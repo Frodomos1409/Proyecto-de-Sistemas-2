@@ -1,6 +1,7 @@
 const AnimalSQL = require('../models/postgres/Animal.pg');
 const AnimalMongo = require('../models/mongo/AnimalMongo');
 
+
 exports.create = async (req, res) => {
     try {
         const sql = await AnimalSQL.create(req.body);
@@ -23,8 +24,11 @@ exports.getAll = async (req, res) => {
 
 exports.getById = async (req, res) => {
     try {
-        const sql = await AnimalSQL.findByPk(req.params.id);
-        const mongo = await AnimalMongo.findById(req.params.id);
+        const id = req.params.id;
+
+        const sql = await AnimalSQL.findByPk(id);
+        const mongo = await AnimalMongo.findById(id);
+
         res.json({ sql, mongo });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -33,8 +37,10 @@ exports.getById = async (req, res) => {
 
 exports.update = async (req, res) => {
     try {
-        await AnimalSQL.update(req.body, { where: { id: req.params.id } });
-        await AnimalMongo.findByIdAndUpdate(req.params.id, req.body);
+        const id = req.params.id;
+        await AnimalSQL.update(req.body, { where: { id } });
+        await AnimalMongo.findByIdAndUpdate(id, req.body);
+
         res.json({ mensaje: 'Animal actualizado en ambas BD' });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -43,8 +49,10 @@ exports.update = async (req, res) => {
 
 exports.delete = async (req, res) => {
     try {
-        await AnimalSQL.destroy({ where: { id: req.params.id } });
-        await AnimalMongo.findByIdAndDelete(req.params.id);
+        const id = req.params.id;
+        await AnimalSQL.destroy({ where: { id } });
+        await AnimalMongo.findByIdAndDelete(id);
+
         res.json({ mensaje: 'Animal eliminado de ambas BD' });
     } catch (err) {
         res.status(500).json({ error: err.message });

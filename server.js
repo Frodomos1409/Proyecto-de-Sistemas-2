@@ -25,7 +25,7 @@ app.use('/api/adoptions', adoptionRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/transfers', transferRoutes);
 app.use('/api/users', userRoutes);
-app.use('/api/rescatistas', rescatistaRoutes); // ✅ Agregado
+app.use('/api/rescatistas', rescatistaRoutes); 
 
 // Ruta base
 app.get('/', (req, res) => {

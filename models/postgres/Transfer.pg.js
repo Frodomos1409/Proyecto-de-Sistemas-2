@@ -1,11 +1,14 @@
+const { DataTypes } = require('sequelize');
+const sequelize = require('../../config/postgresConfig');
+
 const Transfer = sequelize.define('Transfer', {
   id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  animalId: { type: DataTypes.INTEGER },
-  ubicacionAnterior: { type: DataTypes.STRING },
-  ubicacionNueva: { type: DataTypes.STRING },
+  animalId: { type: DataTypes.INTEGER, allowNull: false },
+  ubicacionAnterior: { type: DataTypes.STRING, allowNull: false },
+  ubicacionNueva: { type: DataTypes.STRING, allowNull: false },
   motivo: { type: DataTypes.STRING },
   observaciones: { type: DataTypes.STRING },
-  fechaTraslado: { type: DataTypes.DATE, defaultValue: DataTypes.NOW }
+  fechaTraslado: { type: DataTypes.DATE }
 }, {
   tableName: 'transfers',
   timestamps: true
