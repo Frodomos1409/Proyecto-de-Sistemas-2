@@ -1,4 +1,4 @@
-const EvaluationSQL = require('../models/mysql/Evaluation');
+const EvaluationSQL = require('../models/postgres/Evaluation.pg');
 const EvaluationMongo = require('../models/mongo/EvaluationMongo');
 
 exports.create = async (req, res) => {

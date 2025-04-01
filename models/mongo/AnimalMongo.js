@@ -1,11 +1,15 @@
-const mongoose = require('mongoose');
-
 const AnimalSchema = new mongoose.Schema({
     nombre: { type: String, required: true },
-    edad: { type: Number, required: true },
-    tipo: { type: String, required: true }
-});
-
-const AnimalMongo = mongoose.model('Animal', AnimalSchema);
-
-module.exports = AnimalMongo;
+    especie: { type: String },
+    raza: { type: String },
+    sexo: { type: String },
+    edad: { type: Number },
+    estadoSalud: { type: String },
+    tipoAlimentacion: { type: String },
+    cantidadRecomendada: { type: String },
+    frecuenciaRecomendada: { type: String },
+    fechaLiberacion: { type: Date },
+    ubicacionLiberacion: { type: String }
+  });
+  
+  module.exports = mongoose.model('Animal', AnimalSchema);

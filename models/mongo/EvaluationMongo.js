@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
-
 const EvaluationSchema = new mongoose.Schema({
     animalId: { type: mongoose.Schema.Types.ObjectId, ref: 'Animal', required: true },
-    veterinarian: { type: String, required: true },
-    diagnosis: { type: String, required: true },
-    treatment: { type: String, required: true },
-    date: { type: Date, default: Date.now }
-}, { timestamps: true });
-
-module.exports = mongoose.model('Evaluation', EvaluationSchema);
+    diagnostico: { type: String, required: true },
+    sintomas: { type: String },
+    tratamiento: { type: String },
+    medicacion: { type: String },
+    veterinario: { type: String },
+    fechaEvaluacion: { type: Date, default: Date.now },
+    proximaRevision: { type: Date }
+  }, { timestamps: true });
+  
+  module.exports = mongoose.model('Evaluation', EvaluationSchema);

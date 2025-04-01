@@ -1,4 +1,4 @@
-const AdoptionSQL = require('../models/mysql/Adoption');
+const AdoptionSQL = require('../models/postgres/Adoption.pg');
 const AdoptionMongo = require('../models/mongo/AdoptionMongo');
 
 exports.create = async (req, res) => {

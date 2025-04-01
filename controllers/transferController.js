@@ -1,4 +1,4 @@
-const TransferSQL = require('../models/mysql/Transfer');
+const TransferSQL = require('../models/postgres/Transfer.pg');
 const TransferMongo = require('../models/mongo/TransferMongo');
 
 exports.create = async (req, res) => {

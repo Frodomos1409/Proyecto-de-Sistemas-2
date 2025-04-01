@@ -1,4 +1,4 @@
-const AnimalSQL = require('../models/mysql/Animal');
+const AnimalSQL = require('../models/postgres/Animal.pg');
 const AnimalMongo = require('../models/mongo/AnimalMongo');
 
 exports.create = async (req, res) => {

@@ -1,4 +1,4 @@
-const UserSQL = require('../models/mysql/User');
+const UserSQL = require('../models/postgres/User.pg');
 const UserMongo = require('../models/mongo/UserMongo');
 
 exports.create = async (req, res) => {

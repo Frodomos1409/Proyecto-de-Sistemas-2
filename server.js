@@ -1,8 +1,15 @@
 const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const sequelize = require('./config/sqlDatabase'); // Conexión MySQL
-require('./config/database'); // Conexión MongoDB
+const sequelize = require('./config/postgresConfig'); // PostgreSQL
+require('./config/database'); // MongoDB
+
+// Cargar variables de entorno
+dotenv.config();
+
+const app = express();
+app.use(cors());
+app.use(express.json());
 
 // Rutas
 const animalRoutes = require('./routes/animalRoutes');
@@ -10,23 +17,19 @@ const adoptionRoutes = require('./routes/adoptionRoutes');
 const evaluationRoutes = require('./routes/evaluationRoutes');
 const transferRoutes = require('./routes/transferRoutes');
 const userRoutes = require('./routes/userRoutes');
+const rescatistaRoutes = require('./routes/rescatistaRoutes'); // ✅ Agregado
 
-dotenv.config();
-
-const app = express();
-app.use(cors());
-app.use(express.json());
-
-// Endpoints para todos los modelos
+// Endpoints
 app.use('/api/animales', animalRoutes);
 app.use('/api/adoptions', adoptionRoutes);
 app.use('/api/evaluations', evaluationRoutes);
 app.use('/api/transfers', transferRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/rescatistas', rescatistaRoutes); // ✅ Agregado
 
 // Ruta base
 app.get('/', (req, res) => {
-    res.send('✅ API funcionando con MySQL y MongoDB');
+    res.send('✅ API funcionando con PostgreSQL y MongoDB');
 });
 
 // Iniciar servidor
@@ -36,8 +39,12 @@ app.listen(PORT, async () => {
 
     try {
         await sequelize.authenticate();
-        console.log('✅ Conectado a MySQL correctamente');
+        console.log('✅ Conectado a PostgreSQL correctamente');
+
+        // Sincronizar todos los modelos
+        await sequelize.sync({ alter: true });
+        console.log('📦 Modelos sincronizados con PostgreSQL');
     } catch (error) {
-        console.error('❌ Error en conexión a MySQL:', error);
+        console.error('❌ Error conectando o sincronizando con PostgreSQL:', error);
     }
 });
