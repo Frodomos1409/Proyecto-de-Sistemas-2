@@ -3,9 +3,14 @@ const AnimalMongo = require('../models/mongo/AnimalMongo');
 const RescatistaSQL = require('../models/postgres/Rescatista.pg');
 const RescatistaMongo = require('../models/mongo/RescatistaMongo');
 
+// Crear Animal
 exports.create = async (req, res) => {
   try {
     const { nombreRescatista, ...datosAnimal } = req.body;
+
+    if (!nombreRescatista) {
+      return res.status(400).json({ error: 'El nombre del rescatista es obligatorio' });
+    }
 
     // Buscar rescatista por nombre en ambas BD
     const rescatistaSQL = await RescatistaSQL.findOne({ where: { nombre: nombreRescatista } });
@@ -15,28 +20,30 @@ exports.create = async (req, res) => {
       return res.status(404).json({ error: 'Rescatista no encontrado en una o ambas bases de datos' });
     }
 
-    // Registrar Animal en Mongo
+    // Crear Animal en Mongo
     const animalMongo = await new AnimalMongo({
       ...datosAnimal,
       rescatistaId: rescatistaMongo._id
     }).save();
 
-    // Agregar ID del animal al rescatista en Mongo
+    // Agregar el ID del animal al array del rescatista en Mongo
     rescatistaMongo.animales.push(animalMongo._id);
     await rescatistaMongo.save();
 
-    // Registrar Animal en SQL
+    // Crear Animal en SQL (relación futura: agregar rescatistaId en el modelo si querés)
     const animalSQL = await AnimalSQL.create({
-      ...datosAnimal,
-      // Puedes guardar el nombre del rescatista o en un futuro hacer relación FK si se desea
+      ...datosAnimal
+      // rescatistaId: rescatistaSQL.id
     });
 
-    res.status(201).json({ mongo: animalMongo, sql: animalSQL });
+    res.status(201).json({ mensaje: 'Animal registrado correctamente', mongo: animalMongo, sql: animalSQL });
+
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
+// Obtener todos los animales
 exports.getAll = async (req, res) => {
   try {
     const sql = await AnimalSQL.findAll();
@@ -47,6 +54,7 @@ exports.getAll = async (req, res) => {
   }
 };
 
+// Obtener animal por ID
 exports.getById = async (req, res) => {
   try {
     const id = req.params.id;
@@ -58,6 +66,7 @@ exports.getById = async (req, res) => {
   }
 };
 
+// Actualizar animal
 exports.update = async (req, res) => {
   try {
     const id = req.params.id;
@@ -69,6 +78,7 @@ exports.update = async (req, res) => {
   }
 };
 
+// Eliminar animal
 exports.delete = async (req, res) => {
   try {
     const id = req.params.id;

@@ -8,6 +8,7 @@ const Transfer = sequelize.define('Transfer', {
   ubicacionNueva: { type: DataTypes.STRING, allowNull: false },
   motivo: { type: DataTypes.STRING },
   observaciones: { type: DataTypes.STRING },
+  responsable: { type: DataTypes.STRING }, // ✅ NUEVO CAMPO
   fechaTraslado: { type: DataTypes.DATE }
 }, {
   tableName: 'transfers',
