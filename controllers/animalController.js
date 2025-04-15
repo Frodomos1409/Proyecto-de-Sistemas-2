@@ -1,7 +1,7 @@
 const AnimalSQL = require('../models/postgres/Animal.pg');
 const AnimalMongo = require('../models/mongo/AnimalMongo');
 const RescatistaSQL = require('../models/postgres/Rescatista.pg');
-const RescatistaMongo = require('../models/mongo/RescatistaMongo');
+const Rescatista = require('../models/mongo/RescatistaMongo'); // Cambiar referencia
 
 // Crear Animal
 exports.create = async (req, res) => {
@@ -14,7 +14,7 @@ exports.create = async (req, res) => {
 
     // Buscar rescatista por nombre en ambas BD
     const rescatistaSQL = await RescatistaSQL.findOne({ where: { nombre: nombreRescatista } });
-    const rescatistaMongo = await RescatistaMongo.findOne({ nombre: nombreRescatista });
+    const rescatistaMongo = await Rescatista.findOne({ nombre: nombreRescatista }); // Cambiar uso
 
     if (!rescatistaSQL || !rescatistaMongo) {
       return res.status(404).json({ error: 'Rescatista no encontrado en una o ambas bases de datos' });
@@ -47,7 +47,7 @@ exports.create = async (req, res) => {
 exports.getAll = async (req, res) => {
   try {
     const sql = await AnimalSQL.findAll();
-    const mongo = await AnimalMongo.find().populate('rescatistaId');
+    const mongo = await AnimalMongo.find().populate('rescatistaId', null, 'Rescatista'); // Cambiar referencia en populate
     res.json({ sql, mongo });
   } catch (err) {
     res.status(500).json({ error: err.message });

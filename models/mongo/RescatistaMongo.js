@@ -4,7 +4,7 @@ const RescatistaSchema = new mongoose.Schema({
   telefono: { type: String, required: true },
   fechaRescate: { type: Date, required: true },
   ubicacionRescate: { type: String, required: true },
-  animales: [{ type: mongoose.Schema.Types.ObjectId, ref: 'AnimalMongo' }]
+  animales: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Animal' }]
 }, { timestamps: true });
 
-module.exports = mongoose.model('RescatistaMongo', RescatistaSchema);
+module.exports = mongoose.model('Rescatista', RescatistaSchema);
