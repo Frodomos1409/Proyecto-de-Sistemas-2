@@ -1,33 +1,37 @@
-// models/postgres/Rescatista.pg.js
-const { DataTypes, Model } = require('sequelize'); // Importa Model también
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../../config/postgresConfig');
 
-// QUITA: const Animal = require('./Animal.pg');
+class Rescatista extends Model {}
 
-// Cambia a una definición de clase
-class Rescatista extends Model {
-  // Método estático para definir asociaciones
-  static associate(models) {
-    // Define association here
-    Rescatista.hasMany(models.Animal, {
-      foreignKey: 'rescatista_id', // Clave foránea en la tabla 'animales'
-      as: 'animales'               // Alias
-    });
-  }
-}
-
-Rescatista.init({ // Usa Rescatista.init
-  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+Rescatista.init({
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
+  },
   nombre: { type: DataTypes.STRING, allowNull: false },
   telefono: { type: DataTypes.STRING, allowNull: false },
-  fechaRescate: { type: DataTypes.DATE, allowNull: false },
-  ubicacionRescate: { type: DataTypes.STRING, allowNull: false }
+  fechaRescatista: { type: DataTypes.DATE, allowNull: false },
+  imagen: { type: DataTypes.STRING },
+  geolocalizacionId: {
+    type: DataTypes.UUID,
+    references: {
+      model: 'geolocalizaciones',
+      key: 'id'
+    }
+  }
 }, {
-  sequelize: require('../../config/postgresConfig'), // Pasa sequelize aquí
-  modelName: 'Rescatista', // Nombre del modelo
+  sequelize,
+  modelName: 'Rescatista',
   tableName: 'rescatistas',
   timestamps: true
 });
 
-// QUITA: Rescatista.hasMany(Animal, ...);
+Rescatista.associate = (models) => {
+  Rescatista.belongsTo(models.Geolocalizacion, {
+    foreignKey: 'geolocalizacionId',
+    as: 'ubicacion'
+  });
+};
 
 module.exports = Rescatista;

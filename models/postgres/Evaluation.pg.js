@@ -1,17 +1,56 @@
-const { DataTypes } = require('sequelize');
+const { DataTypes, Model } = require('sequelize');
 const sequelize = require('../../config/postgresConfig');
 
-const Evaluation = sequelize.define('Evaluation', {
-  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
-  animalId: { type: DataTypes.INTEGER, allowNull: false },
-  diagnostico: { type: DataTypes.STRING, allowNull: false },
-  sintomasObservados: { type: DataTypes.STRING },
-  tratamientoAdministrado: { type: DataTypes.STRING },
-  medicacionRecetada: { type: DataTypes.STRING },
-  veterinario: { type: DataTypes.STRING },
-  fechaEvaluacion: { type: DataTypes.DATE },
-  proximaRevision: { type: DataTypes.DATE }
+class Evaluation extends Model {
+  static associate(models) {
+    Evaluation.belongsTo(models.Animal, {
+      foreignKey: 'animalId',
+      as: 'animal'
+    });
+    Evaluation.belongsTo(models.Veterinario, {
+      foreignKey: 'responsableId',
+      as: 'veterinario'
+    });
+  }
+}
+
+Evaluation.init({
+  id: {
+    type: DataTypes.UUID,
+    primaryKey: true,
+    defaultValue: DataTypes.UUIDV4
+  },
+  animalId: {
+    type: DataTypes.UUID,
+    allowNull: false
+  },
+  diagnostico: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  sintomas: {
+    type: DataTypes.STRING
+  },
+  medicacion: {
+    type: DataTypes.STRING
+  },
+  responsableId: { // ✅ cambiado
+    type: DataTypes.UUID,
+    allowNull: true,
+    references: {
+      model: 'veterinarios',
+      key: 'id'
+    }
+  },
+  fechaEvaluacion: {
+    type: DataTypes.DATE
+  },
+  proximaRevision: {
+    type: DataTypes.DATE
+  }
 }, {
+  sequelize,
+  modelName: 'Evaluation',
   tableName: 'evaluations',
   timestamps: true
 });

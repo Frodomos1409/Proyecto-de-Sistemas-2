@@ -1,40 +1,58 @@
-const { DataTypes, Model } = require('sequelize'); 
+const { DataTypes, Model } = require('sequelize');
+const sequelize = require('../../config/postgresConfig');
 
 class Animal extends Model {
   static associate(models) {
-      Animal.belongsTo(models.Rescatista, {
+    Animal.belongsTo(models.Rescatista, {
       foreignKey: 'rescatista_id',
-      as: 'rescatista'             
+      as: 'rescatista'
+    });
+    Animal.belongsTo(models.Geolocalizacion, {
+      foreignKey: 'geolocalizacion_id',
+      as: 'geolocalizacion'
     });
   }
 }
 
-Animal.init({ 
-  id: { type: DataTypes.INTEGER, autoIncrement: true, primaryKey: true },
+Animal.init({
+  id: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+    primaryKey: true
+  },
   nombre: { type: DataTypes.STRING, allowNull: false },
-  especie: { type: DataTypes.STRING, allowNull: false },
-  raza: { type: DataTypes.STRING, allowNull: false },
-  sexo: { type: DataTypes.STRING, allowNull: false },
-  edad: { type: DataTypes.INTEGER, allowNull: false },
-  estadoSalud: { type: DataTypes.STRING, allowNull: false },
-  tipoAlimentacion: { type: DataTypes.STRING, allowNull: false },
-  cantidadRecomendada: { type: DataTypes.STRING, allowNull: false },
-  frecuenciaRecomendada: { type: DataTypes.STRING, allowNull: false },
-  fechaLiberacion: { type: DataTypes.DATE },
-  ubicacionLiberacion: { type: DataTypes.STRING },
+  especie: DataTypes.STRING,
+  raza: DataTypes.STRING,
+  sexo: DataTypes.STRING,
+  edad: DataTypes.INTEGER,
+  estadoSalud: DataTypes.STRING,
+  tipoAlimentacion: DataTypes.STRING,
+  cantidadRecomendada: DataTypes.STRING,
+  frecuenciaRecomendada: DataTypes.STRING,
+  fechaRescate: DataTypes.DATE,
+  ubicacionRescate: DataTypes.STRING,
+  detallesRescate: DataTypes.STRING,
+  imagen: DataTypes.STRING,
+  tipo: DataTypes.STRING,
   rescatista_id: {
-    type: DataTypes.INTEGER,
-    allowNull: true,   
+    type: DataTypes.UUID,
     references: {
       model: 'rescatistas',
       key: 'id'
     }
+  },
+  geolocalizacion_id: {
+    type: DataTypes.UUID,
+    references: {
+      model: 'geolocalizaciones',
+      key: 'id'
+    }
   }
 }, {
-  sequelize: require('../../config/postgresConfig'),
-  modelName: 'Animal', 
+  sequelize,
+  modelName: 'Animal',
   tableName: 'animales',
-  timestamps: false
+  timestamps: true
 });
 
-module.exports = Animal; 
+module.exports = Animal;
