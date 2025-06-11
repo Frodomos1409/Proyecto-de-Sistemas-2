@@ -32,13 +32,18 @@ exports.createDirect = async (data, id) => {
   });
 };
 
-
 exports.getAllDirect = async () => {
   return await AdoptionSQL.findAll({
-    include: [{ model: AnimalSQL, as: 'animal', attributes: ['nombre'] }]
+    include: [
+      { model: AnimalSQL, as: 'animal', attributes: ['nombre'] },
+      {
+        model: GeolocalizacionSQL,
+        as: 'direccion',
+        attributes: ['latitud', 'longitud', 'descripcion']
+      }
+    ]
   });
 };
-
 
 
 exports.getByIdDirect = async (id) => {

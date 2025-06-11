@@ -51,13 +51,16 @@ exports.createDirect = async (data, id) => {
 };
 
 exports.getAllDirect = async () => {
-  const transfers = await TransferMongo.find().populate({
-    path: 'animalId',
-    select: 'nombre'
-  });
+  const transfers = await TransferMongo.find()
+    .populate({ path: 'animalId', select: 'nombre' })
+    .populate({ path: 'geolocalizacionAnteriorId', select: 'latitud longitud descripcion' })
+    .populate({ path: 'geolocalizacionNuevaId', select: 'latitud longitud descripcion' });
+
   return transfers.map(t => ({
     ...t.toObject(),
-    nombreAnimal: t.animalId?.nombre
+    nombreAnimal: t.animalId?.nombre,
+    ubicacionAnterior: t.geolocalizacionAnteriorId,
+    ubicacionNueva: t.geolocalizacionNuevaId
   }));
 };
 

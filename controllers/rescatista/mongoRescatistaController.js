@@ -32,7 +32,12 @@ exports.createDirect = async (data) => {
 };
 
 exports.getAllDirect = async () => {
-  return await RescatistaMongo.find().populate('animales');
+  return await RescatistaMongo.find()
+    .populate('animales')
+    .populate({
+      path: 'geolocalizacionId',
+      select: 'latitud longitud descripcion'
+    });
 };
 
 exports.getByIdDirect = async (id) => {

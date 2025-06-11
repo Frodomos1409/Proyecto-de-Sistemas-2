@@ -35,13 +35,14 @@ exports.createDirect = async (data, id) => {
 
 
 exports.getAllDirect = async () => {
-  const liberations = await LiberationMongo.find().populate({
-    path: 'animalId',
-    select: 'nombre'
-  });
+  const liberations = await LiberationMongo.find()
+    .populate({ path: 'animalId', select: 'nombre' })
+    .populate({ path: 'geolocalizacionId', select: 'latitud longitud descripcion' });
+
   return liberations.map(l => ({
     ...l.toObject(),
-    nombreAnimal: l.animalId?.nombre
+    nombreAnimal: l.animalId?.nombre,
+    ubicacionLiberacion: l.geolocalizacionId
   }));
 };
 

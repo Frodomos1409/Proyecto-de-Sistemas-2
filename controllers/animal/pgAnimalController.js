@@ -24,7 +24,7 @@ exports.createDirect = async (data, id, rescatistaId) => {
       id: rescatistaId,
       nombre: nombreRescatista,
       telefono: telefonoRescatista,
-      fechaRescatista
+      fechaRescatista: fechaRescate
     });
   }
 

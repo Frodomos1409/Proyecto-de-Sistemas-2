@@ -52,7 +52,19 @@ exports.createDirect = async (data, id) => {
 
 exports.getAllDirect = async () => {
   return await TransferSQL.findAll({
-    include: [{ model: AnimalSQL, as: 'animal', attributes: ['nombre'] }]
+    include: [
+      { model: AnimalSQL, as: 'animal', attributes: ['nombre'] },
+      {
+        model: GeolocalizacionSQL,
+        as: 'ubicacionAnterior',
+        attributes: ['latitud', 'longitud', 'descripcion']
+      },
+      {
+        model: GeolocalizacionSQL,
+        as: 'ubicacionNueva',
+        attributes: ['latitud', 'longitud', 'descripcion']
+      }
+    ]
   });
 };
 

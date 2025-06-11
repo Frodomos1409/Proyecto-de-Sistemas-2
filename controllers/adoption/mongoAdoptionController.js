@@ -34,13 +34,14 @@ exports.createDirect = async (data, id) => {
 
 
 exports.getAllDirect = async () => {
-  const adoptions = await AdoptionMongo.find().populate({
-    path: 'animalId',
-    select: 'nombre'
-  });
+  const adoptions = await AdoptionMongo.find()
+    .populate({ path: 'animalId', select: 'nombre' })
+    .populate({ path: 'geolocalizacionId', select: 'latitud longitud descripcion' });
+
   return adoptions.map(a => ({
     ...a.toObject(),
-    nombreAnimal: a.animalId?.nombre
+    nombreAnimal: a.animalId?.nombre,
+    ubicacion: a.geolocalizacionId
   }));
 };
 

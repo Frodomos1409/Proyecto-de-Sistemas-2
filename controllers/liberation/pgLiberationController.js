@@ -33,10 +33,16 @@ exports.createDirect = async (data, id) => {
   return liberacion;
 };
 
-
 exports.getAllDirect = async () => {
   return await LiberationSQL.findAll({
-    include: [{ model: AnimalSQL, as: 'animal', attributes: ['nombre'] }]
+    include: [
+      { model: AnimalSQL, as: 'animal', attributes: ['nombre'] },
+      {
+        model: GeolocalizacionSQL,
+        as: 'ubicacionLiberacion',
+        attributes: ['latitud', 'longitud', 'descripcion']
+      }
+    ]
   });
 };
 

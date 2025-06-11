@@ -35,7 +35,14 @@ exports.createDirect = async (data) => {
 
 exports.getAllDirect = async () => {
   return await RescatistaSQL.findAll({
-    include: [{ model: AnimalSQL, as: 'animales' }]
+    include: [
+      { model: AnimalSQL, as: 'animales' },
+      {
+        model: GeolocalizacionSQL,
+        as: 'ubicacion',
+        attributes: ['latitud', 'longitud', 'descripcion']
+      }
+    ]
   });
 };
 
